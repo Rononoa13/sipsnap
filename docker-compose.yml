@@ -1,0 +1,11 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfilie: Dockerfile
+    container_name: sipsnap-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
