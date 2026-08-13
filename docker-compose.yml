@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: ./backend
-      dockerfilie: Dockerfile
+      dockerfile: Dockerfile
     container_name: sipsnap-api
     restart: unless-stopped
     env_file:
