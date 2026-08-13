@@ -4,7 +4,7 @@ install:
 	cd backend && python3 -m pip install -r requirements.txt
 
 test:
-	cd backend && pytest
+	cd backend && python -m pytest
 
 lint:
 	cd backend && ruff check .
