@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     vision_provider: str = "mock"
     vision_api_key: str | None = None
 
-    max_image_size: int = 10
+    max_image_size_mb: int = 10
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -19,6 +19,10 @@ class Settings(BaseSettings):
         case_sensitive=True,
         extra="ignore",
     )
+
+    @property
+    def max_image_size_bytes(self) -> int:
+        return self.max_image_size_mb * 1024 * 1024
 
 
 @lru_cache

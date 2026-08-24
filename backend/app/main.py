@@ -2,6 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
+from app.api.scan import router as scan_router
 from app.core.config import get_settings
 
 settings = get_settings()
@@ -14,6 +15,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title=settings.app_name)
+
+app.include_router(scan_router, prefix="/api")
 
 
 @app.get("/health")
