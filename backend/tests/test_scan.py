@@ -139,9 +139,12 @@ def test_scan_accepts_valid_image() -> None:
 
     data = response.json()
 
-    assert data["filename"] == "menu.jpg"
-    assert data["content_type"] == "image/jpeg"
-    assert data["size_bytes"] == len(image_bytes)
+    assert "items" in data
+    assert len(data["items"]) == 2
+
+    assert data["items"][0]["name"] == "Negroni"
+    assert data["items"][0]["description"] is None
+    assert data["items"][0]["category"] == "Cocktail"
 
 
 # Invalid file test
@@ -176,3 +179,50 @@ def test_scan_rejects_corrupted_image() -> None:
     )
 
     assert response.status_code == 400
+
+
+# Expect a Menu test
+def test_scan_returns_menu_from_mock_vision() -> None:
+    image_bytes = create_test_image("JPEG")
+
+    response = client.post(
+        "/api/scan",
+        files={
+            "image": (
+                "menu.jpg",
+                image_bytes,
+                "image/jpeg",
+            )
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["items"]) == 2
+
+    assert data["items"][0]["name"] == "Negroni"
+
+    assert data["items"][1]["name"] == "Old Fashioned"
+
+
+'''
+We can make this even stronger.
+
+Create a test-specific VisionService:
+
+class TestVisionService(VisionService):
+    async def extract_menu(self, image: bytes) -> Menu:
+        return Menu(
+            items=[
+                {
+                    "name": "Test Drink",
+                }
+            ]
+        )
+
+app.dependency_overrides[get_vision_service] = (
+    lambda: TestVisionService()
+)
+'''

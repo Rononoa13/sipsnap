@@ -17,6 +17,7 @@ class MenuItem(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str = Field(min_length=1, description="The name of the menu item.")
+    category: str | None = None
     description: str | None = None
 
 

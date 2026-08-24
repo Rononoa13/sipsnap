@@ -7,3 +7,4 @@ pytest
 httpx
 ruff
 pillow
+pytest-asyncio

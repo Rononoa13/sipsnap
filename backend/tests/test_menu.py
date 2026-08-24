@@ -7,7 +7,7 @@ from app.schemas.menu import Menu
 def test_valid_menu() -> None:
     menu = Menu(
         items=[
-            {"name": "Negroni", "description": "None"},
+            {"name": "Negroni", "category": "Cocktail", "description": "None"},
         ]
     )
     assert menu.items[0].name == "Negroni"

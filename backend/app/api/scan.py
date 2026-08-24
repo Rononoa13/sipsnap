@@ -1,24 +1,28 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
 from app.core.config import get_settings
+from app.schemas.menu import Menu
+from app.services.dependencies import get_vision_service
 from app.services.image_validator import (
     ImageValidationError,
     validate_image,
 )
+from app.services.vision import VisionService
 
 router = APIRouter()
 
 settings = get_settings()
 
 
-@router.post("/scan")
+@router.post("/scan", response_model=Menu)
 async def scan_menu(
     image: UploadFile = File(...),
-) -> dict[str, str | int]:
+    vision_service: VisionService = Depends(get_vision_service),
+) -> Menu:
     try:
         image_bytes = await image.read()
 
-        validated_image = validate_image(
+        validate_image(
             image_bytes=image_bytes,
             filename=image.filename or "unknown",
             content_type=image.content_type,
@@ -30,8 +34,4 @@ async def scan_menu(
             detail=str(exc),
         ) from exc
 
-    return {
-        "filename": validated_image.filename,
-        "content_type": validated_image.content_type,
-        "size_bytes": validated_image.size_bytes,
-    }
+    return await vision_service.extract_menu(image_bytes)
