@@ -91,7 +91,12 @@ async function scanMenu() {
 
         const result = await response.json();
 
-        console.log("Scan result:", result);
+        sessionStorage.setItem(
+            "sipsnap-menu",
+            JSON.stringify(result)
+        );
+
+        window.location.href = "/results.html";
     } catch (error) {
         console.error("Scan failed:", error);
     }
