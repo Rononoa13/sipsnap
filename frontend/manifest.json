@@ -1,0 +1,9 @@
+{
+  "name": "SipSnap",
+  "short_name": "SipSnap",
+  "description": "Snap a menu. Understand the menu.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}

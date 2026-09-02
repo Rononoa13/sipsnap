@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Snap a menu and turn it into a digital menu.">
+    <link rel="manifest" href="./manifest.json">
+    <title>SipSnap</title>
+    
+</head>
+<body>
+    <main>
+        <h1>SipSnap</h1>
+        <p>Snap the menu. Understand the menu.</p>
+    </main>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/sw.js")
+                    .then(() => {
+                        console.log("Service worker registered.");
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "Service worker registration failed:",
+                            error
+                        );
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
