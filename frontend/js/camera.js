@@ -71,15 +71,30 @@ fileInput.addEventListener("change", () => {
 });
 
 // Form Data
-scanButton.addEventListener("click", () => {
+async function scanMenu() {
     if (!selectedFile) {
         return;
     }
 
     const formData = new FormData();
-
     formData.append("image", selectedFile);
 
-    console.log("Ready to upload:", selectedFile);
-    console.log("FormData:", formData);
-});
+    try {
+        const response = await fetch("http://localhost:8000/api/scan", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error(`Scan failed: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        console.log("Scan result:", result);
+    } catch (error) {
+        console.error("Scan failed:", error);
+    }
+}
+
+scanButton.addEventListener("click", scanMenu);

@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.scan import router as scan_router
 from app.core.config import get_settings
@@ -18,6 +19,14 @@ app = FastAPI(title=settings.app_name)
 
 app.include_router(scan_router, prefix="/api")
 
+app.add_middleware(
+
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"],
+    allow_credentials=False,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 async def health_check() -> dict:
