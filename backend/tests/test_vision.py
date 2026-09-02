@@ -16,7 +16,7 @@ async def test_mock_vision_service_implements_interface() -> None:
 async def test_mock_vision_returns_menu() -> None:
     service = MockVisionService()
 
-    menu = await service.extract_menu(b"fake-image-bytes")
+    menu = await service.extract_menu(b"fake-image-bytes", "image/jpeg")
 
     assert isinstance(menu, Menu)
     assert len(menu.items) == 2

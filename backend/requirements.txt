@@ -8,3 +8,4 @@ httpx
 ruff
 pillow
 pytest-asyncio
+google-genai

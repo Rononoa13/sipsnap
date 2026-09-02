@@ -5,7 +5,7 @@ from app.services.vision import VisionService
 class MockVisionService(VisionService):
     """Deterministic vision service for development and tests."""
 
-    async def extract_menu(self, image: bytes) -> Menu:
+    async def extract_menu(self, image: bytes, content_type: str) -> Menu:
         return Menu(
             items=[
                 {

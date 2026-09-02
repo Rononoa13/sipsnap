@@ -9,14 +9,15 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     vision_provider: str = "mock"
-    vision_api_key: str | None = None
+    gemini_api_key: str | None = None
+    vision_model: str = "gemini-3.1-flash-lite"
 
     max_image_size_mb: int = 10
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        case_sensitive=True,
+        case_sensitive=False,
         extra="ignore",
     )
 

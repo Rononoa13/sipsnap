@@ -207,7 +207,7 @@ def test_scan_returns_menu_from_mock_vision() -> None:
     assert data["items"][1]["name"] == "Old Fashioned"
 
 
-'''
+"""
 We can make this even stronger.
 
 Create a test-specific VisionService:
@@ -225,4 +225,4 @@ class TestVisionService(VisionService):
 app.dependency_overrides[get_vision_service] = (
     lambda: TestVisionService()
 )
-'''
+"""

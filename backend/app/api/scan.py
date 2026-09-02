@@ -34,4 +34,6 @@ async def scan_menu(
             detail=str(exc),
         ) from exc
 
-    return await vision_service.extract_menu(image_bytes)
+    return await vision_service.extract_menu(
+        image_bytes, content_type=image.content_type
+    )
