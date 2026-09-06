@@ -12,26 +12,38 @@
         name="description"
         content="Your scanned menu."
     >
-
+    <link rel="stylesheet" href="/css/style.css">
     <title>Menu — SipSnap</title>
 </head>
 
 <body>
-    <main>
-        <header>
+    <main class="results-page">
+        <header class="results-header">
             <h1>Your Menu</h1>
             <p>Here's what SipSnap found.</p>
         </header>
 
-        <section id="menu-results">
-            <!-- Menu items will appear here. -->
+        <section
+            id="menu-results"
+            class="menu-results"
+            aria-label="Scanned menu"
+        >
+            <!-- Menu items will be rendered here. -->
         </section>
 
-        <p id="results-error" hidden>
+        <p
+            id="results-error"
+            class="results-error"
+            hidden
+        >
             We couldn't load your menu.
         </p>
 
-        <button id="scan-again" type="button">
+        <button
+            id="scan-again"
+            class="scan-again"
+            type="button"
+        >
             Scan Another Menu
         </button>
     </main>
