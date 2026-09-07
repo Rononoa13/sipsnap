@@ -20,13 +20,13 @@ app = FastAPI(title=settings.app_name)
 app.include_router(scan_router, prefix="/api")
 
 app.add_middleware(
-
     CORSMiddleware,
     allow_origins=["http://localhost:8080"],
     allow_credentials=False,
     allow_methods=["POST"],
     allow_headers=["*"],
 )
+
 
 @app.get("/health")
 async def health_check() -> dict:

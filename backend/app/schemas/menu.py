@@ -19,6 +19,7 @@ class MenuItem(BaseModel):
     name: str = Field(min_length=1, description="The name of the menu item.")
     category: str | None = None
     description: str | None = None
+    image_url: str | None = None
 
 
 class Menu(BaseModel):

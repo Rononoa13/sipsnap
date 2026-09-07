@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -13,6 +14,8 @@ class Settings(BaseSettings):
     vision_model: str = "gemini-3.1-flash-lite"
 
     max_image_size_mb: int = 10
+
+    drink_image_cache_dir: Path = Path("data/drink_images")
 
     model_config = SettingsConfigDict(
         env_file=".env",
