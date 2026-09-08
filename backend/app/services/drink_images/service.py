@@ -7,7 +7,10 @@ from app.services.drink_images.base import DrinkImageProvider
 
 class DrinkImageService:
     def __init__(
-        self, providers: list[DrinkImageProvider], cache_dir: Path, client: httpx.Client
+        self,
+        providers: list[DrinkImageProvider],
+        cache_dir: Path,
+        client: httpx.Client | None = None,
     ) -> None:
         self.providers = providers
         self.cache_dir = cache_dir
