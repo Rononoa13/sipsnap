@@ -18,6 +18,7 @@ from app.services.dependencies import get_drink_image_service
 
 settings = get_settings()
 
+
 def create_test_image(
     image_format: str = "JPEG",
 ) -> bytes:
@@ -232,6 +233,7 @@ app.dependency_overrides[get_vision_service] = (
 )
 """
 
+
 class FakeDrinkImageService:
     def __init__(self, images: dict[str, Path] | None = None) -> None:
         self.images = images or {}
@@ -239,21 +241,19 @@ class FakeDrinkImageService:
     def find_image(self, drink_name: str) -> Path | None:
         return self.images.get(drink_name)
 
+
 @pytest.fixture
 def fake_drink_image_service():
-    app.dependency_overrides[get_drink_image_service] = (
-        lambda: FakeDrinkImageService()
-    )
+    app.dependency_overrides[get_drink_image_service] = lambda: FakeDrinkImageService()
 
     yield
 
     app.dependency_overrides.pop(get_drink_image_service, None)
 
+
 def test_scan_returns_menu_with_drink_image() -> None:
-    app.dependency_overrides[get_drink_image_service] = (
-        lambda: FakeDrinkImageService(
-            images={"Negroni": Path("negroni.jpg")}
-        )
+    app.dependency_overrides[get_drink_image_service] = lambda: FakeDrinkImageService(
+        images={"Negroni": Path("negroni.jpg")}
     )
 
     try:
@@ -285,6 +285,7 @@ def test_scan_returns_menu_with_drink_image() -> None:
             get_drink_image_service,
             None,
         )
+
 
 # Write a static-file test
 def test_drink_image_is_served_from_cache(

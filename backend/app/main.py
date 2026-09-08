@@ -28,11 +28,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+settings.drink_image_cache_dir.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
 app.mount(
     "/drink-images",
     StaticFiles(directory=settings.drink_image_cache_dir),
     name="drink-images",
 )
+
 
 @app.get("/health")
 async def health_check() -> dict:
