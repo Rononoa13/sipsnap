@@ -1,4 +1,5 @@
 from io import BytesIO
+from pathlib import Path
 
 import pytest
 
@@ -7,11 +8,15 @@ from fastapi.testclient import TestClient
 from PIL import Image
 
 from app.main import app
+from app.core.config import get_settings
 from app.services.image_validator import (
     ImageValidationError,
     validate_image,
 )
+from app.services.dependencies import get_drink_image_service
+# from app.services.drink_images.service import DrinkImageService
 
+settings = get_settings()
 
 def create_test_image(
     image_format: str = "JPEG",
@@ -226,3 +231,74 @@ app.dependency_overrides[get_vision_service] = (
     lambda: TestVisionService()
 )
 """
+
+class FakeDrinkImageService:
+    def __init__(self, images: dict[str, Path] | None = None) -> None:
+        self.images = images or {}
+
+    def find_image(self, drink_name: str) -> Path | None:
+        return self.images.get(drink_name)
+
+@pytest.fixture
+def fake_drink_image_service():
+    app.dependency_overrides[get_drink_image_service] = (
+        lambda: FakeDrinkImageService()
+    )
+
+    yield
+
+    app.dependency_overrides.pop(get_drink_image_service, None)
+
+def test_scan_returns_menu_with_drink_image() -> None:
+    app.dependency_overrides[get_drink_image_service] = (
+        lambda: FakeDrinkImageService(
+            images={"Negroni": Path("negroni.jpg")}
+        )
+    )
+
+    try:
+        image_bytes = create_test_image("JPEG")
+
+        response = client.post(
+            "/api/scan",
+            files={
+                "image": (
+                    "menu.jpg",
+                    image_bytes,
+                    "image/jpeg",
+                )
+            },
+        )
+
+        assert response.status_code == 200
+
+        data = response.json()
+
+        assert data["items"][0]["name"] == "Negroni"
+        assert data["items"][0]["image_url"] == "/drink-images/negroni.jpg"
+
+        assert data["items"][1]["name"] == "Old Fashioned"
+        assert data["items"][1]["image_url"] is None
+
+    finally:
+        app.dependency_overrides.pop(
+            get_drink_image_service,
+            None,
+        )
+
+# Write a static-file test
+def test_drink_image_is_served_from_cache(
+    tmp_path: Path,
+) -> None:
+    image_path = settings.drink_image_cache_dir / "negroni.jpg"
+    image_path.parent.mkdir(parents=True, exist_ok=True)
+    image_path.write_bytes(b"fake-image-data")
+
+    try:
+        response = client.get("/drink-images/negroni.jpg")
+
+        assert response.status_code == 200
+        assert response.content == b"fake-image-data"
+
+    finally:
+        image_path.unlink(missing_ok=True)

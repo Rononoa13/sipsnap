@@ -50,5 +50,5 @@ async def scan_menu(
         image_path = drink_image_service.find_image(item.name)
 
         if image_path is not None:
-            item.image_url = f"/drink_images/{image_path.name}"
+            item.image_url = f"/drink-images/{image_path.name}"
     return menu

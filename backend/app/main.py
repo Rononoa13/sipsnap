@@ -2,6 +2,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.api.scan import router as scan_router
 from app.core.config import get_settings
@@ -27,6 +28,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount(
+    "/drink-images",
+    StaticFiles(directory=settings.drink_image_cache_dir),
+    name="drink-images",
+)
 
 @app.get("/health")
 async def health_check() -> dict:
